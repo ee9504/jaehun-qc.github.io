@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>김재훈 — 품질관리 지원자</title>
+<style>
+/* ─── 토큰 ─── */
+:root {
+  --bg:        #F4F5F3;
+  --bg-card:   #ECEEE9;
+  --border:    #DDE0D9;
+  --border-s:  #C4C9BF;
+  --ink:       #1C1F1C;
+  --ink-2:     #4A5047;
+  --ink-3:     #8A9187;
+  --accent:    #3D5247;   /* 차분한 slate-green 단일 포인트 */
+  --accent-bg: #E6EDE8;
+  --accent-bd: #B4C9BC;
+  --warn:      #5E4E2A;
+  --warn-bg:   #F0E9D6;
+  --warn-bd:   #C9B07A;
+  --mono: ui-monospace,'SFMono-Regular',Consolas,monospace;
+  --sans: 'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;
+}
+
+/* ─── 리셋 ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--sans);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *{animation:none!important;transition:none!important;}
+}
+
+/* ─── 레이아웃 ─── */
+.wrap{max-width:700px;margin:0 auto;padding:0 24px;}
+section{padding:72px 0;border-top:1px solid var(--border);}
+
+/* ─── 네비 ─── */
+nav{
+  position:sticky;top:0;z-index:10;
+  background:rgba(244,245,243,0.94);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--border);
+  overflow-x:auto;
+}
+.nav-inner{
+  max-width:700px;margin:0 auto;padding:0 24px;
+  display:flex;align-items:center;gap:2px;
+  height:50px;
+}
+.nav-name{
+  font-size:13px;font-weight:700;color:var(--ink);
+  margin-right:auto;white-space:nowrap;padding-right:16px;
+  letter-spacing:-0.01em;
+}
+nav a{
+  font-size:13px;color:var(--ink-2);text-decoration:none;
+  padding:6px 10px;border-radius:4px;white-space:nowrap;
+  transition:background .15s,color .15s;
+}
+nav a:hover,nav a:focus-visible{background:var(--ink);color:var(--bg);outline:none;}
+
+/* ─── 히어로 ─── */
+.hero{padding:72px 0 64px;border-top:none;}
+
+/* ② 한 줄 소개가 맨 위에서 먼저 눈에 들어오게 */
+.hero-tagline{
+  font-size:clamp(22px,6vw,34px);
+  font-weight:800;
+  letter-spacing:-0.025em;
+  line-height:1.2;
+  color:var(--ink);
+  margin-bottom:20px;
+  word-break:keep-all;
+}
+.hero-sub{
+  font-size:clamp(14px,3.5vw,17px);
+  color:var(--ink-2);
+  font-weight:400;
+  margin-bottom:10px;
+  letter-spacing:-0.01em;
+}
+.hero-name{
+  font-family:var(--mono);
+  font-size:13px;
+  color:var(--ink-3);
+  letter-spacing:0.08em;
+  margin-bottom:48px;
+}
+
+/* ─── 수치 블록 ─── */
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--border-s);
+  border:1px solid var(--border-s);
+}
+.metric{background:var(--bg);padding:22px 16px 18px;}
+.metric-num{
+  font-family:var(--mono);
+  font-size:clamp(22px,5vw,30px);
+  font-weight:700;color:var(--ink);
+  display:block;line-height:1;margin-bottom:8px;
+  font-variant-numeric:tabular-nums;
+}
+.metric-label{font-size:11.5px;color:var(--ink-3);display:block;line-height:1.5;}
+
+/* ─── 섹션 공통 헤더 ─── */
+.sec-label{
+  font-family:var(--mono);
+  font-size:10.5px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--ink-3);
+  margin-bottom:10px;
+}
+.sec-title{
+  font-size:21px;font-weight:800;
+  letter-spacing:-0.02em;margin-bottom:28px;
+  color:var(--ink);
+}
+
+/* ─── 자격요건 ─── */
+.req-list{list-style:none;}
+.req-item{
+  display:flex;align-items:flex-start;
+  gap:14px;padding:18px 0;
+  border-bottom:1px solid var(--border);
+}
+.req-item:last-child{border-bottom:none;}
+.badge{
+  flex-shrink:0;
+  font-family:var(--mono);font-size:10.5px;font-weight:700;
+  padding:3px 9px;border-radius:20px;border:1px solid;
+  margin-top:3px;white-space:nowrap;
+}
+.b-pass{color:var(--accent);background:var(--accent-bg);border-color:var(--accent-bd);}
+.b-part{color:var(--warn);background:var(--warn-bg);border-color:var(--warn-bd);}
+.req-main{font-size:15px;font-weight:700;margin-bottom:4px;word-break:keep-all;}
+.req-sub{font-size:13.5px;color:var(--ink-2);line-height:1.6;word-break:keep-all;}
+.req-note{font-size:12px;color:var(--ink-3);margin-top:22px;}
+
+/* ─── 자격증 카드 ─── */
+.cards{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+@media(max-width:400px){.cards{grid-template-columns:1fr;}}
+.card{
+  background:var(--bg-card);border:1px solid var(--border);
+  padding:20px;
+}
+.card-tag{
+  font-family:var(--mono);font-size:10.5px;
+  color:var(--ink-3);margin-bottom:10px;
+  display:block;word-break:break-all;
+}
+.card-title{font-size:14.5px;font-weight:700;margin-bottom:5px;word-break:keep-all;}
+.card-desc{font-size:13px;color:var(--ink-2);line-height:1.55;word-break:keep-all;}
+
+/* ─── STAR 아코디언 ─── */
+.star-wrap{border:1px solid var(--border);}
+.star-row{border-bottom:1px solid var(--border);}
+.star-row:last-child{border-bottom:none;}
+.star-btn{
+  width:100%;display:flex;align-items:flex-start;gap:14px;
+  background:none;border:none;cursor:pointer;
+  padding:20px 18px;text-align:left;
+  font-family:var(--sans);color:var(--ink);
+}
+.star-btn:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
+.star-key{
+  font-family:var(--mono);font-weight:800;font-size:13px;
+  color:var(--accent);width:18px;flex-shrink:0;padding-top:1px;
+}
+.star-title{
+  font-size:15px;font-weight:700;flex:1;
+  word-break:keep-all;line-height:1.5;
+}
+.star-arrow{
+  font-size:10px;color:var(--ink-3);flex-shrink:0;
+  transition:transform .22s ease;padding-top:4px;
+}
+.star-row.open .star-arrow{transform:rotate(90deg);}
+.star-body{max-height:0;overflow:hidden;transition:max-height .28s ease;}
+.star-body-inner{
+  padding:0 18px 22px 50px;
+  font-size:14px;color:var(--ink-2);line-height:1.75;
+  word-break:keep-all;
+}
+.tbd{
+  display:inline-block;
+  font-family:var(--mono);font-size:10.5px;
+  border:1px dashed var(--border-s);color:var(--ink-3);
+  padding:1px 7px;border-radius:20px;margin-left:4px;
+}
+
+/* ─── Tool ─── */
+.tools{display:grid;gap:10px;}
+.tool{
+  background:var(--bg-card);border:1px solid var(--border);
+  padding:18px 20px;
+  display:flex;gap:16px;align-items:flex-start;
+}
+.tool-name{
+  font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink);
+  flex-shrink:0;min-width:72px;padding-top:2px;white-space:nowrap;
+}
+.tool-desc{font-size:13.5px;color:var(--ink-2);line-height:1.65;word-break:keep-all;}
+
+/* ─── 기본정보 ─── */
+.info-list{list-style:none;}
+.info-row{
+  display:flex;gap:20px;
+  padding:16px 0;border-bottom:1px solid var(--border);
+  font-size:14px;
+}
+.info-row:last-child{border-bottom:none;}
+.info-key{
+  flex-shrink:0;width:48px;
+  font-size:12px;color:var(--ink-3);font-weight:600;padding-top:2px;
+}
+.info-val{color:var(--ink);line-height:1.65;word-break:keep-all;}
+.info-val b{font-weight:700;}
+
+/* ─── ④ 타임라인 — 시간 순, 세로 선 ─── */
+.timeline{list-style:none;position:relative;padding-left:0;}
+.timeline::before{
+  content:'';
+  position:absolute;
+  left:72px;          /* 날짜 열 너비 + gap */
+  top:8px;bottom:8px;
+  width:1px;
+  background:var(--border-s);
+}
+.tl-item{
+  display:flex;gap:0;
+  padding:18px 0;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.tl-item:last-child{border-bottom:none;}
+.tl-period{
+  flex-shrink:0;width:72px;
+  font-family:var(--mono);font-size:11px;
+  color:var(--ink-3);padding-top:3px;line-height:1.5;
+  padding-right:12px;
+}
+.tl-dot{
+  flex-shrink:0;width:24px;
+  display:flex;justify-content:center;padding-top:6px;
+}
+.tl-dot::before{
+  content:'';
+  width:7px;height:7px;
+  border-radius:50%;
+  background:var(--accent);
+  flex-shrink:0;
+}
+.tl-body{padding-left:10px;flex:1;min-width:0;}
+.tl-title{font-size:14.5px;font-weight:700;margin-bottom:4px;word-break:keep-all;}
+.tl-desc{font-size:13px;color:var(--ink-2);line-height:1.6;word-break:keep-all;}
+
+/* ─── 푸터 ─── */
+footer{
+  padding:36px 24px 56px;
+  text-align:center;
+  font-family:var(--mono);font-size:11.5px;color:var(--ink-3);
+  border-top:1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-name">김재훈</span>
+    <a href="#req">자격요건</a>
+    <a href="#cert">자격·이수</a>
+    <a href="#project">프로젝트</a>
+    <a href="#tools">역량</a>
+    <a href="#detail">이력</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- 히어로 -->
+  <section class="hero">
+    <!-- ② 한 줄 소개 가장 먼저, 가장 크게 -->
+    <p class="hero-tagline">데이터로 근본 원인을<br>검증합니다</p>
+    <p class="hero-sub">품질관리 지향 · 산업공학 학사 · 직무 관련 자격증 4건</p>
+    <p class="hero-name">KIM JAE-HUN</p>
+    <!-- 수치 3개 -->
+    <div class="metrics">
+      <div class="metric">
+        <span class="metric-num" data-to="3.73" data-dec="2">0.00</span>
+        <span class="metric-label">전공 학점<br>/4.5</span>
+      </div>
+      <div class="metric">
+        <span class="metric-num" data-to="4" data-dec="0">0</span>
+        <span class="metric-label">직무 관련<br>자격증</span>
+      </div>
+      <div class="metric">
+        <span class="metric-num" data-to="875" data-dec="0">0</span>
+        <span class="metric-label">TOEIC<br>/990</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 자격요건 -->
+  <section id="req">
+    <p class="sec-label">Requirement</p>
+    <h2 class="sec-title">자격요건 대비</h2>
+    <ul class="req-list">
+      <li class="req-item">
+        <span class="badge b-pass">PASS</span>
+        <div>
+          <p class="req-main">학력</p>
+          <p class="req-sub">성균관대학교 시스템경영공학과(산업공학) 학사 졸업 · 2022.02</p>
+        </div>
+      </li>
+      <li class="req-item">
+        <span class="badge b-pass">PASS</span>
+        <div>
+          <p class="req-main">학점</p>
+          <p class="req-sub">전공 3.73 / 전체 3.54 (4.5 기준 · 요구 3.0 이상)</p>
+        </div>
+      </li>
+      <li class="req-item">
+        <span class="badge b-pass">PASS</span>
+        <div>
+          <p class="req-main">어학 — TOEIC 700점 이상</p>
+          <p class="req-sub">TOEIC 875점 (2025.04) · OPIc Intermediate High (2025.04)</p>
+        </div>
+      </li>
+      <li class="req-item">
+        <span class="badge b-pass">PASS</span>
+        <div>
+          <p class="req-main">병역</p>
+          <p class="req-sub">공군 병장 만기제대 (군수) · 2017.03~2019.02</p>
+        </div>
+      </li>
+      <li class="req-item">
+        <span class="badge b-part">부분</span>
+        <div>
+          <p class="req-main">공정관리·품질관리 지식</p>
+          <p class="req-sub">실무 경험 없음. 품질경영기사·6Sigma GB·ISO 9001 예비심사원 자격 및 Minitab Core Tool (Cpk·Gage R&R·관리도) 실습으로 지식 기반 보유.</p>
+        </div>
+      </li>
+      <li class="req-item">
+        <span class="badge b-pass">우대</span>
+        <div>
+          <p class="req-main">전공 관련 프로젝트 경험</p>
+          <p class="req-sub">실험계획법·모비율 검정 활용 종합설계 프로젝트 수행 (성균관대, 2021)</p>
+        </div>
+      </li>
+      <li class="req-item">
+        <span class="badge b-pass">우대</span>
+        <div>
+          <p class="req-main">O/A 활용 능력</p>
+          <p class="req-sub">Excel (Solver·함수·피벗) / Python / R / Minitab 실습 및 실무 사용 경험</p>
+        </div>
+      </li>
+    </ul>
+    <p class="req-note">※ "부분" 항목은 실무 경험이 아닌 자격·교육 기반의 지식임을 명기합니다.</p>
+  </section>
+
+  <!-- 자격증 & 이수 -->
+  <section id="cert">
+    <p class="sec-label">Certification</p>
+    <h2 class="sec-title">자격증 및 이수 과정</h2>
+    <div class="cards">
+      <div class="card">
+        <span class="card-tag">자격증 · 2023.06</span>
+        <p class="card-title">품질경영기사</p>
+        <p class="card-desc">품질관리 직무 핵심 국가기술자격</p>
+      </div>
+      <div class="card">
+        <span class="card-tag">자격증 · 2024.03</span>
+        <p class="card-title">ADsP</p>
+        <p class="card-desc">데이터분석 준전문가</p>
+      </div>
+      <div class="card">
+        <span class="card-tag">자격증 · 2026.01</span>
+        <p class="card-title">6Sigma Green Belt</p>
+        <p class="card-desc">DMAIC 기반 공정개선 방법론</p>
+      </div>
+      <div class="card">
+        <span class="card-tag">자격증 · 2026.07</span>
+        <p class="card-title">ISO 9001 예비심사원</p>
+        <p class="card-desc">품질경영시스템 심사 자격</p>
+      </div>
+      <div class="card">
+        <span class="card-tag">교육이수 · 한국커리어개발원 · 16h · 2024.01</span>
+        <p class="card-title">6시그마 프로젝트 GB</p>
+        <p class="card-desc">DMAIC 및 통계 Core Tool 활용 공정개선 실습</p>
+      </div>
+      <div class="card">
+        <span class="card-tag">교육이수 · 한국품질재단 · 32h · 2026.07</span>
+        <p class="card-title">ISO 9001 예비심사원 과정</p>
+        <p class="card-desc">품질경영시스템 이해, 부적합 사례 연구, 심사보고서 작성</p>
+      </div>
+      <div class="card" style="grid-column:1/-1;">
+        <span class="card-tag">교육이수 · 한국품질재단 · 진행 중 (2026.06~11)</span>
+        <p class="card-title">부울경 초광역 제조산업 MEGA-AX 프로젝트</p>
+        <p class="card-desc">Minitab 활용 공정개선 및 Core Tool (MSA·SPC) 실습, AI 활용 프로젝트 수행</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 핵심 프로젝트 STAR -->
+  <section id="project">
+    <p class="sec-label">Case Study</p>
+    <h2 class="sec-title">핵심 프로젝트</h2>
+    <div class="star-wrap">
+      <div class="star-row open">
+        <button class="star-btn" type="button">
+          <span class="star-key">S</span>
+          <span class="star-title">상황 — 사용자 문 개폐 방향 오류 개선 (2021.09~12)</span>
+          <span class="star-arrow">▶</span>
+        </button>
+        <div class="star-body">
+          <div class="star-body-inner">
+            성균관대학교 시스템경영공학과 종합설계 프로젝트. 기존 시각적 표시 방식 대신 손잡이 자체 디자인 개선을 선택했으나, 보고서 작성 단계에서 효과를 뒷받침할 통계적 근거가 부족한 상황이었음.
+          </div>
+        </div>
+      </div>
+      <div class="star-row">
+        <button class="star-btn" type="button">
+          <span class="star-key">T</span>
+          <span class="star-title">과제 — 통계로 설계 개선의 효과를 증명</span>
+          <span class="star-arrow">▶</span>
+        </button>
+        <div class="star-body">
+          <div class="star-body-inner">
+            응용통계·EDA·실험계획법 수업에서 쌓은 분석 역량을 활용해, 디자인 개선안의 효과를 통계적으로 검증하고 보고서의 설득력을 높이는 것.
+          </div>
+        </div>
+      </div>
+      <div class="star-row">
+        <button class="star-btn" type="button">
+          <span class="star-key">A</span>
+          <span class="star-title">행동 — 실험계획법 배치 + 모비율 검정</span>
+          <span class="star-arrow">▶</span>
+        </button>
+        <div class="star-body">
+          <div class="star-body-inner">
+            날짜 요인을 고려해 모형실험을 배치(실험계획법 적용)하고, 수집된 데이터에 대해 모비율 검정을 시행. 5% 유의수준에서 통계적으로 유의미한 차이를 보이는 개선안 2가지 도출.
+            <span style="display:block;margin-top:8px;">실험 참여 인원 및 표본 수 <span class="tbd">숫자 확인 필요</span></span>
+          </div>
+        </div>
+      </div>
+      <div class="star-row">
+        <button class="star-btn" type="button">
+          <span class="star-key">R</span>
+          <span class="star-title">결과 — 팀 전원 A+</span>
+          <span class="star-arrow">▶</span>
+        </button>
+        <div class="star-body">
+          <div class="star-body-inner">
+            통계적 검증으로 보고서의 설득력을 높였고, 팀 전원 A+ 학점을 받음.
+            <span style="display:block;margin-top:8px;">팀 인원 수, 오인식률 개선 폭 <span class="tbd">숫자 확인 필요</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tool 역량 -->
+  <section id="tools">
+    <p class="sec-label">Tool Proficiency</p>
+    <h2 class="sec-title">Tool 활용 역량</h2>
+    <div class="tools">
+      <div class="tool">
+        <span class="tool-name">Minitab</span>
+        <span class="tool-desc">Cpk 산출, Gage R&R 분석, 관리도 작성 등 Core Tool 실습</span>
+      </div>
+      <div class="tool">
+        <span class="tool-name">Excel</span>
+        <span class="tool-desc">Solver로 가설검정·분산분석·선형계획법 실습. 아르바이트 중 매입-매출·주문대장 작성 (함수·피벗테이블)</span>
+      </div>
+      <div class="tool">
+        <span class="tool-name">Python</span>
+        <span class="tool-desc">Jupyter Notebook과 사이킷런으로 분류·회귀·클러스터링 실습</span>
+      </div>
+      <div class="tool">
+        <span class="tool-name">R</span>
+        <span class="tool-desc">ANOVA, EDA 및 웹 크롤링 기초 실습</span>
+      </div>
+      <div class="tool">
+        <span class="tool-name">AI 도구</span>
+        <span class="tool-desc">NotebookLM·ChatGPT로 교육자료 정리 및 특성요인도 보완. Codex로 자기소개서 관리용 웹앱(Google Apps Script) 구축</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 상세 이력 -->
+  <section id="detail">
+    <p class="sec-label">Background</p>
+    <h2 class="sec-title">학력 · 병역 · 어학</h2>
+    <ul class="info-list">
+      <li class="info-row">
+        <span class="info-key">대학</span>
+        <span class="info-val"><b>성균관대학교</b> 시스템경영공학과(산업공학) · 학사 · 2015.03~2022.02<br>전공 3.73 / 전체 3.54 (4.5 기준)</span>
+      </li>
+      <li class="info-row">
+        <span class="info-key">고교</span>
+        <span class="info-val">경신고등학교 (대구, 인문계) · 2011~2014</span>
+      </li>
+      <li class="info-row">
+        <span class="info-key">병역</span>
+        <span class="info-val">공군 병장 만기제대 (군수) · 2017.03~2019.02</span>
+      </li>
+      <li class="info-row">
+        <span class="info-key">어학</span>
+        <span class="info-val">TOEIC <b>875</b>/990 (2025.04) · OPIc <b>Intermediate High</b> (2025.04)</span>
+      </li>
+    </ul>
+
+    <!-- ④ 경력·활동 타임라인 — 시간 순서(오래된 순) -->
+    <h2 class="sec-title" style="margin-top:52px;">경력 · 활동 · 봉사</h2>
+    <ul class="timeline">
+      <li class="tl-item">
+        <span class="tl-period">2015~<br>2021</span>
+        <span class="tl-dot"></span>
+        <div class="tl-body">
+          <p class="tl-title">야구동아리 ABACA — 주장</p>
+          <p class="tl-desc">성균관대학교. 동아리 운영관리 및 교내 리그 활동.</p>
+        </div>
+      </li>
+      <li class="tl-item">
+        <span class="tl-period">2021.06<br>~12</span>
+        <span class="tl-dot"></span>
+        <div class="tl-body">
+          <p class="tl-title">봉사 — 1365 행정지원 (40시간)</p>
+          <p class="tl-desc">도서관 서가정리 등.</p>
+        </div>
+      </li>
+      <li class="tl-item">
+        <span class="tl-period">2021.09<br>~12</span>
+        <span class="tl-dot"></span>
+        <div class="tl-body">
+          <p class="tl-title">종합설계 프로젝트 — 성균관대학교</p>
+          <p class="tl-desc">"사용자 문 개폐 방향 오류 개선". 실험계획법·모비율 검정으로 개선안 2가지 도출, 팀 전원 A+.</p>
+        </div>
+      </li>
+      <li class="tl-item">
+        <span class="tl-period">2022.03<br>~08</span>
+        <span class="tl-dot"></span>
+        <div class="tl-body">
+          <p class="tl-title">아르바이트 — 건자재 대리점</p>
+          <p class="tl-desc">사무보조, 입출고·배송 업무. Excel 함수·피벗테이블로 매입-매출·주문대장 작성.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+</div><!-- /wrap -->
+
+<footer>김재훈 · 품질관리 지원자 · 2026</footer>
+
+<script>
+(function(){
+
+  /* STAR 아코디언 */
+  var rows=document.querySelectorAll('.star-row');
+  function syncH(){
+    rows.forEach(function(r){
+      var b=r.querySelector('.star-body');
+      b.style.maxHeight=r.classList.contains('open')?b.scrollHeight+'px':'0px';
+    });
+  }
+  document.querySelectorAll('.star-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var row=btn.closest('.star-row');
+      var was=row.classList.contains('open');
+      rows.forEach(function(r){r.classList.remove('open');});
+      if(!was) row.classList.add('open');
+      setTimeout(syncH,0);
+    });
+  });
+  syncH();
+  window.addEventListener('resize',syncH);
+
+  /* 카운트업 */
+  var counters=document.querySelectorAll('[data-to]');
+  var done=new WeakSet();
+  function countUp(el){
+    if(done.has(el)) return; done.add(el);
+    var to=parseFloat(el.getAttribute('data-to'));
+    var dec=parseInt(el.getAttribute('data-dec'),10);
+    var t0=null,dur=900;
+    (function step(ts){
+      if(!t0)t0=ts;
+      var p=Math.min((ts-t0)/dur,1);
+      var e=1-Math.pow(1-p,3);
+      el.textContent=(to*e).toFixed(dec);
+      if(p<1) requestAnimationFrame(step);
+      else el.textContent=to.toFixed(dec);
+    })(performance.now());
+  }
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){countUp(e.target);io.unobserve(e.target);}
+      });
+    },{threshold:0.5});
+    counters.forEach(function(el){io.observe(el);});
+  } else {
+    counters.forEach(function(el){
+      el.textContent=parseFloat(el.getAttribute('data-to')).toFixed(parseInt(el.getAttribute('data-dec'),10));
+    });
+  }
+
+})();
+</script>
+</body>
+</html>
